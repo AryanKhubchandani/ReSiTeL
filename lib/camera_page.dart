@@ -1,23 +1,28 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'main.dart';
 
 List<CameraDescription> cameras = [];
+FlashMode? _currentFlashMode;
+bool _isRearCameraSelected = false;
+bool _isFlashOn = false;
 
 class CameraPage extends StatefulWidget {
+  const CameraPage({Key? key}) : super(key: key);
+
   @override
   _CameraPageState createState() => _CameraPageState();
 }
 
 class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
-  int _page = 1;
+  final int _page = 1;
   late PageController _c;
   CameraController? controller;
   bool _isCameraInitialized = false;
 
   void onNewCameraSelected(CameraDescription cameraDescription) async {
     final previousCameraController = controller;
+
     // Instantiating the camera controller
     final CameraController cameraController = CameraController(
       cameraDescription,
@@ -34,6 +39,10 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
         controller = cameraController;
       });
     }
+    // Update UI if controller updated
+    cameraController.addListener(() {
+      if (mounted) setState(() {});
+    });
 
     // Update UI if controller updated
     cameraController.addListener(() {
@@ -43,6 +52,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     // Initialize controller
     try {
       await cameraController.initialize();
+      _currentFlashMode = controller!.value.flashMode;
     } on CameraException catch (e) {
       print('Error initializing camera: $e');
     }
@@ -61,7 +71,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
       keepPage: true,
       initialPage: _page,
     );
-    onNewCameraSelected(cameras[0]);
+    onNewCameraSelected(cameras[1]);
     super.initState();
   }
 
@@ -102,12 +112,113 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: _isCameraInitialized
-          ? AspectRatio(
-              aspectRatio: 1 / controller!.value.aspectRatio,
-              child: controller!.buildPreview(),
+          ? Column(
+              children: [
+                AspectRatio(
+                  aspectRatio: 1 / controller!.value.aspectRatio,
+                  child: Stack(
+                    children: [
+                      controller!.buildPreview(),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          16.0,
+                          8.0,
+                          16.0,
+                          8.0,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                const Spacer(),
+                                Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          _isCameraInitialized = false;
+                                        });
+                                        onNewCameraSelected(
+                                          cameras[
+                                              _isRearCameraSelected ? 0 : 1],
+                                        );
+                                        setState(() {
+                                          _isRearCameraSelected =
+                                              !_isRearCameraSelected;
+                                        });
+                                      },
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.circle,
+                                            color: Colors.black38,
+                                            size: 60,
+                                          ),
+                                          Icon(
+                                            _isRearCameraSelected
+                                                ? Icons.camera_rear
+                                                : Icons.camera_front,
+                                            color: Colors.white,
+                                            size: 30,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10.0),
+                                    InkWell(
+                                        onTap: () async {
+                                          setState(() {
+                                            _isFlashOn = !_isFlashOn;
+                                            _currentFlashMode =
+                                                FlashMode.always;
+                                          });
+                                          _isFlashOn
+                                              ? controller!
+                                                  .setFlashMode(FlashMode.torch)
+                                              : controller!
+                                                  .setFlashMode(FlashMode.off);
+                                        },
+                                        child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            const Icon(
+                                              Icons.circle,
+                                              color: Colors.black38,
+                                              size: 60,
+                                            ),
+                                            Icon(
+                                              _isFlashOn
+                                                  ? Icons.flash_on
+                                                  : Icons.flash_off,
+                                              color: Colors.white,
+                                              size: 30,
+                                            ),
+                                          ],
+                                        )),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            // AnimatedIcon(icon: AnimatedIcons.play_pause, progress: progress)
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             )
-          : Container(),
+          : const Center(
+              child: Text(
+                'LOADING..',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
     );
   }
 }
