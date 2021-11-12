@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:animate_icons/animate_icons.dart';
 
 List<CameraDescription> cameras = [];
 FlashMode? _currentFlashMode;
@@ -19,6 +20,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   late PageController _c;
   CameraController? controller;
   bool _isCameraInitialized = false;
+  late AnimateIconController animatedController;
 
   void onNewCameraSelected(CameraDescription cameraDescription) async {
     final previousCameraController = controller;
@@ -72,6 +74,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
       initialPage: _page,
     );
     onNewCameraSelected(cameras[1]);
+    animatedController = AnimateIconController();
     super.initState();
   }
 
@@ -80,6 +83,26 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     controller?.dispose();
     super.dispose();
   }
+
+  // bool onEndIconPress(BuildContext context) {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       content: Text("Stop"),
+  //       duration: Duration(seconds: 1),
+  //     ),
+  //   );
+  //   return true;
+  // }
+
+  // bool onStartIconPress(BuildContext context) {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       content: Text("Record"),
+  //       duration: Duration(seconds: 1),
+  //     ),
+  //   );
+  //   return true;
+  // }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -129,7 +152,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                           8.0,
                         ),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
@@ -204,7 +227,32 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                 ),
                               ],
                             ),
-                            // AnimatedIcon(icon: AnimatedIcons.play_pause, progress: progress)
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.circle,
+                                  color: Colors.black38,
+                                  size: 80.0,
+                                ),
+                                AnimateIcons(
+                                  startIcon: Icons.play_arrow,
+                                  endIcon: Icons.stop,
+                                  controller: animatedController,
+                                  size: 60.0,
+                                  startIconColor: Colors.green,
+                                  endIconColor: Colors.red,
+                                  onEndIconPress: () {
+                                    print("Stop button pressed");
+                                    return true;
+                                  },
+                                  onStartIconPress: () {
+                                    print("Start button pressed");
+                                    return true;
+                                  },
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
