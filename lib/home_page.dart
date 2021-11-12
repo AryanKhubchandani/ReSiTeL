@@ -27,31 +27,34 @@ class _MainPageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        selectedIconTheme: IconThemeData(color: _getColor()),
-        unselectedIconTheme: const IconThemeData(color: Colors.white60),
-        backgroundColor: Colors.black,
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        currentIndex: _page,
-        onTap: (index) {
-          this._c.animateToPage(index,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeInOutSine);
-        },
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline),
-            label: 'archive',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.camera_alt_outlined,
+      bottomNavigationBar: Container(
+        height: 0.0,
+        child: BottomNavigationBar(
+          selectedIconTheme: IconThemeData(color: _getColor()),
+          unselectedIconTheme: IconThemeData(color: Colors.grey[400]),
+          backgroundColor: Colors.black,
+          type: BottomNavigationBarType.shifting,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          currentIndex: _page,
+          onTap: (index) {
+            this._c.animateToPage(index,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOutSine);
+          },
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chat_bubble_outline),
+              label: 'archive',
             ),
-            label: 'camera',
-          ),
-        ],
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.camera_alt_outlined,
+              ),
+              label: 'camera',
+            ),
+          ],
+        ),
       ),
       body: PageView(
         controller: _c,
