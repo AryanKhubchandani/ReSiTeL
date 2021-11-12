@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   camera: ^0.9.4+3
   animate_icons: ^2.0.0
+  flutter_staggered_animations: ^1.0.0
+  flutter_slidable: ^1.0.0
 
 dev_dependencies:
   flutter_test:
