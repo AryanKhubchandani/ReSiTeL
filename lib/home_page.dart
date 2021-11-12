@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'archive_page.dart';
+import 'camera_page.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -65,6 +68,14 @@ class _MainPageState extends State<HomePage> {
     );
   }
 
- 
+  Color _getColor() {
+    switch (_page) {
+      case 0:
+        return Colors.green;
+      case 1:
+        return Colors.blue;
+      default:
+        return Colors.red;
+    }
   }
 }
