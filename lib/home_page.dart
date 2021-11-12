@@ -75,7 +75,7 @@ class _MainPageState extends State<HomePage> {
       case 1:
         return Colors.blue;
       default:
-        return Colors.red;
+        return Colors.blue;
     }
   }
 }
