@@ -184,8 +184,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                           ),
                                           Icon(
                                             _isRearCameraSelected
-                                                ? Icons.camera_rear
-                                                : Icons.camera_front,
+                                                ? Icons.camera_front
+                                                : Icons.camera_rear,
                                             color: Colors.white,
                                             size: 30,
                                           ),
