@@ -9,7 +9,7 @@ class Circle extends StatelessWidget {
   Circle(
       {required this.color,
       required this.diameter,
-      this.center = const Offset(0, 0)});
+      this.center = const Offset(0.0, 0.0)});
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +28,8 @@ class CirclePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawCircle(center ?? Offset(size.width / 2, size.height / 2),
-        size.width / 2, Paint()..color = this.color);
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), size.width,
+        Paint()..color = color);
   }
 
   @override

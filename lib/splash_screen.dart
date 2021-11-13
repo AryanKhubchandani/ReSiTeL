@@ -12,7 +12,7 @@ class SplashScreen extends StatefulWidget {
 
 class SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  final circleDiameter = 75.0;
+  final circleDiameter = 50.0;
 
   late AnimationController controller1;
   late Animation<double> translation1;
@@ -32,8 +32,8 @@ class SplashScreenState extends State<SplashScreen>
 
   late Animation<double> translation4;
 
-  late double currentTranslation = 0.0;
-  late double currentScale = 1.0;
+  double currentTranslation = 0.0;
+  double currentScale = 1.0;
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class SplashScreenState extends State<SplashScreen>
     translation1 = Tween<double>(begin: 50.0, end: -20.0).animate(
         CurvedAnimation(
             parent: controller1,
-            curve: Interval(0.0, 0.14, curve: Curves.easeInOut)));
+            curve: const Interval(0.0, 0.14, curve: Curves.easeInOut)));
     scale1 = Tween<double>(begin: 0.8, end: 0.4).animate(CurvedAnimation(
         parent: controller1, curve: Interval(0.0, 0.14, curve: Curves.linear)));
 
@@ -89,7 +89,7 @@ class SplashScreenState extends State<SplashScreen>
         parent: controller1,
         curve: Interval(0.71, 0.85, curve: Curves.linear)));
 
-    translation4 = Tween<double>(begin: 65.0, end: 15.0).animate(
+    translation4 = Tween<double>(begin: 65.0, end: 40.0).animate(
         CurvedAnimation(
             parent: controller1,
             curve: Interval(0.85, 1.0, curve: Curves.linear)));
@@ -167,7 +167,7 @@ class SplashScreenState extends State<SplashScreen>
 
     controller1.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        showLandingPage();
+        // showLandingPage();
       }
     });
 
@@ -209,7 +209,7 @@ class SplashScreenState extends State<SplashScreen>
             children: <Widget>[
               Transform(
                 transform: matrix1,
-                child: Circle(color: Colors.blue, diameter: circleDiameter),
+                child: Circle(color: Colors.pink, diameter: circleDiameter),
               ),
               Transform(
                 transform: matrix2,
