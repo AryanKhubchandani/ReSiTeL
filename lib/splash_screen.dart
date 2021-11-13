@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hci/title.dart';
 import 'circles.dart';
 import 'home_page.dart';
 import 'dart:async';
@@ -11,10 +12,12 @@ class SplashScreen extends StatefulWidget {
 }
 
 class SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   final circleDiameter = 50.0;
 
   late AnimationController controller1;
+  late AnimationController controller2;
+
   late Animation<double> translation1;
   late Animation<double> scale1;
   late Animation<double> translation1Reverse;
@@ -32,6 +35,8 @@ class SplashScreenState extends State<SplashScreen>
 
   late Animation<double> translation4;
 
+  late Animation<double> animation;
+
   double currentTranslation = 0.0;
   double currentScale = 1.0;
 
@@ -41,6 +46,12 @@ class SplashScreenState extends State<SplashScreen>
 
     controller1 =
         AnimationController(vsync: this, duration: const Duration(seconds: 7));
+    controller2 =
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    animation = Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(controller2);
     translation1 = Tween<double>(begin: 50.0, end: -20.0).animate(
         CurvedAnimation(
             parent: controller1,
@@ -89,7 +100,7 @@ class SplashScreenState extends State<SplashScreen>
         parent: controller1,
         curve: Interval(0.71, 0.85, curve: Curves.linear)));
 
-    translation4 = Tween<double>(begin: 65.0, end: 40.0).animate(
+    translation4 = Tween<double>(begin: 65.0, end: 30.0).animate(
         CurvedAnimation(
             parent: controller1,
             curve: Interval(0.85, 1.0, curve: Curves.linear)));
@@ -167,10 +178,15 @@ class SplashScreenState extends State<SplashScreen>
 
     controller1.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        // showLandingPage();
+        controller2.forward();
       }
     });
 
+    controller2.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        showLandingPage();
+      }
+    });
     controller1.forward();
   }
 
@@ -194,6 +210,9 @@ class SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    EdgeInsets p1 = const EdgeInsets.fromLTRB(36, 0, 38, 15);
+    EdgeInsets p2 = const EdgeInsets.fromLTRB(3, 20, 42, 0);
+
     final matrix1 =
         Matrix4.translationValues(-1 * currentTranslation, 0.0, 0.0);
     matrix1.scale(currentScale, currentScale);
@@ -204,19 +223,40 @@ class SplashScreenState extends State<SplashScreen>
       body: Center(
         child: Hero(
           tag: "CircleHeroTag",
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Transform(
-                transform: matrix1,
-                child: Circle(color: Colors.pink, diameter: circleDiameter),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 40.0),
+              Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Transform(
+                    transform: matrix1,
+                    child: Circle(
+                        color: Colors.cyan,
+                        diameter: circleDiameter,
+                        n: 1,
+                        padding: p1),
+                  ),
+                  Transform(
+                    transform: matrix2,
+                    child: Opacity(
+                      opacity: 0.8,
+                      child: Circle(
+                          color: Colors.yellow,
+                          diameter: circleDiameter,
+                          n: 2,
+                          padding: p2),
+                    ),
+                  )
+                ],
               ),
-              Transform(
-                transform: matrix2,
-                child: Opacity(
-                  opacity: 0.8,
-                  child: Circle(color: Colors.green, diameter: circleDiameter),
-                ),
+              const SizedBox(
+                height: 40.0,
+              ),
+              FadeTransition(
+                opacity: animation,
+                child: TitleText(),
               )
             ],
           ),
@@ -226,34 +266,11 @@ class SplashScreenState extends State<SplashScreen>
   }
 
   void showLandingPage() {
-    Future.delayed(Duration(milliseconds: 500)).then(
+    Future.delayed(const Duration(milliseconds: 500)).then(
       (_) => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       ),
     );
   }
 }
-
-// class _SplashScreenState extends State<SplashScreen> {
-//   @override
-//   void initState() {
-//     super.initState();
-
-//     Future.delayed(const Duration(seconds: 3), () async {
-//       Navigator.pushReplacement(
-//           context, MaterialPageRoute(builder: (context) => const HomePage()));
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Container(
-//         height: MediaQuery.of(context).size.height,
-//         width: MediaQuery.of(context).size.width,
-//         child: const Text("HEYYYYY"),
-//       ),
-//     );
-//   }
-// }
