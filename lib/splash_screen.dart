@@ -210,8 +210,8 @@ class SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    EdgeInsets p1 = const EdgeInsets.fromLTRB(36, 0, 38, 15);
-    EdgeInsets p2 = const EdgeInsets.fromLTRB(3, 20, 42, 0);
+    EdgeInsets p1 = const EdgeInsets.fromLTRB(45, 0, 32, 15);
+    EdgeInsets p2 = const EdgeInsets.fromLTRB(14, 24, 36, 0);
 
     final matrix1 =
         Matrix4.translationValues(-1 * currentTranslation, 0.0, 0.0);
