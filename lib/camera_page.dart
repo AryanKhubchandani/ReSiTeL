@@ -159,97 +159,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                               children: [
                                 const Spacer(),
                                 Column(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          _isCameraInitialized = false;
-                                        });
-                                        onNewCameraSelected(
-                                          cameras[
-                                              _isRearCameraSelected ? 0 : 1],
-                                        );
-                                        setState(() {
-                                          _isRearCameraSelected =
-                                              !_isRearCameraSelected;
-                                        });
-                                      },
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          const Icon(
-                                            Icons.circle,
-                                            color: Colors.black38,
-                                            size: 60,
-                                          ),
-                                          Icon(
-                                            _isRearCameraSelected
-                                                ? Icons.camera_front
-                                                : Icons.camera_rear,
-                                            color: Colors.white,
-                                            size: 30,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10.0),
-                                    InkWell(
-                                        onTap: () async {
-                                          setState(() {
-                                            _isFlashOn = !_isFlashOn;
-                                            _currentFlashMode =
-                                                FlashMode.always;
-                                          });
-                                          _isFlashOn
-                                              ? controller!
-                                                  .setFlashMode(FlashMode.torch)
-                                              : controller!
-                                                  .setFlashMode(FlashMode.off);
-                                        },
-                                        child: Stack(
-                                          alignment: Alignment.center,
-                                          children: [
-                                            const Icon(
-                                              Icons.circle,
-                                              color: Colors.black38,
-                                              size: 60,
-                                            ),
-                                            Icon(
-                                              _isFlashOn
-                                                  ? Icons.flash_on
-                                                  : Icons.flash_off,
-                                              color: Colors.white,
-                                              size: 30,
-                                            ),
-                                          ],
-                                        )),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                const Icon(
-                                  Icons.circle,
-                                  color: Colors.black38,
-                                  size: 80.0,
-                                ),
-                                AnimateIcons(
-                                  startIcon: Icons.play_arrow,
-                                  endIcon: Icons.stop,
-                                  controller: animatedController,
-                                  size: 60.0,
-                                  startIconColor: Colors.green,
-                                  endIconColor: Colors.red,
-                                  onEndIconPress: () {
-                                    print("Stop button pressed");
-                                    return true;
-                                  },
-                                  onStartIconPress: () {
-                                    print("Start button pressed");
-                                    return true;
-                                  },
+                                  children: [],
                                 ),
                               ],
                             ),
@@ -258,6 +168,92 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                       ),
                     ],
                   ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          _isCameraInitialized = false;
+                        });
+                        onNewCameraSelected(
+                          cameras[_isRearCameraSelected ? 0 : 1],
+                        );
+                        setState(() {
+                          _isRearCameraSelected = !_isRearCameraSelected;
+                        });
+                      },
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          const Icon(
+                            Icons.circle,
+                            color: Colors.black38,
+                            size: 60,
+                          ),
+                          Icon(
+                            _isRearCameraSelected
+                                ? Icons.camera_rear
+                                : Icons.camera_front,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        const Icon(
+                          Icons.circle,
+                          color: Colors.black38,
+                          size: 80.0,
+                        ),
+                        AnimateIcons(
+                          startIcon: Icons.play_arrow,
+                          endIcon: Icons.stop,
+                          controller: animatedController,
+                          size: 60.0,
+                          startIconColor: Colors.green,
+                          endIconColor: Colors.red,
+                          onEndIconPress: () {
+                            print("Stop button pressed");
+                            return true;
+                          },
+                          onStartIconPress: () {
+                            print("Start button pressed");
+                            return true;
+                          },
+                        ),
+                      ],
+                    ),
+                    InkWell(
+                        onTap: () async {
+                          setState(() {
+                            _isFlashOn = !_isFlashOn;
+                            _currentFlashMode = FlashMode.always;
+                          });
+                          _isFlashOn
+                              ? controller!.setFlashMode(FlashMode.torch)
+                              : controller!.setFlashMode(FlashMode.off);
+                        },
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            const Icon(
+                              Icons.circle,
+                              color: Colors.black38,
+                              size: 60,
+                            ),
+                            Icon(
+                              _isFlashOn ? Icons.flash_on : Icons.flash_off,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          ],
+                        )),
+                  ],
                 ),
               ],
             )
