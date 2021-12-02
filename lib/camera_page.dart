@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:animate_icons/animate_icons.dart';
+import 'package:hci/detection/live_camera.dart';
 
 List<CameraDescription> cameras = [];
 FlashMode? _currentFlashMode;
@@ -221,6 +222,14 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                             return true;
                           },
                           onStartIconPress: () {
+                            setState(() async {
+                              await LiveFeedState().loadTfModel();
+                            });
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => LiveFeed(cameras)),
+                            // );
                             print("Start button pressed");
                             return true;
                           },

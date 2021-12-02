@@ -6,6 +6,7 @@ import 'dart:math' as math;
 
 import '../camera_page.dart';
 import '../message.dart';
+import 'live_camera.dart';
 
 typedef void Callback(List<dynamic> list, int h, int w);
 FlashMode? _currentFlashMode;
@@ -194,6 +195,7 @@ class _CameraFeedState extends State<CameraFeed> {
                     );
                     setState(() {
                       _isFrontCameraSelected = !_isFrontCameraSelected;
+                      _isFlashOn = false;
                     });
                   },
                   child: Stack(
@@ -229,14 +231,14 @@ class _CameraFeedState extends State<CameraFeed> {
                       size: 60.0,
                       startIconColor: Colors.green,
                       endIconColor: Colors.red,
+                      onStartIconPress: () {
+                        LiveFeedState().loadTfModel();
+                        return true;
+                      },
                       onEndIconPress: () {
                         message(context);
                         print("Stop button pressed");
-
-                        return true;
-                      },
-                      onStartIconPress: () {
-                        print("Start button pressed");
+                        LiveFeedState().endTfModel();
                         return true;
                       },
                     ),
