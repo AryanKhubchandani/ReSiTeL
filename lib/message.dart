@@ -33,6 +33,7 @@ Future<void> message(BuildContext context) async {
                 child: const Text('Share'),
                 onPressed: () {
                   Share.share('check out my website https://example.com');
+                  Navigator.of(context).pop();
                 },
               ),
             ],
