@@ -11,14 +11,15 @@ class LiveFeed extends StatefulWidget {
   final List<CameraDescription> cameras;
   LiveFeed(this.cameras);
   @override
-  _LiveFeedState createState() => _LiveFeedState();
+  LiveFeedState createState() => LiveFeedState();
 }
 
-class _LiveFeedState extends State<LiveFeed> {
+class LiveFeedState extends State<LiveFeed> {
   List<dynamic> _recognitions = [];
   int _imageHeight = 0;
   int _imageWidth = 0;
   initCameras() async {}
+
   loadTfModel() async {
     await Tflite.loadModel(
       model: "assets/models/ssd_mobilenet.tflite",
@@ -26,9 +27,10 @@ class _LiveFeedState extends State<LiveFeed> {
     );
   }
 
-  /* 
-  The set recognitions function assigns the values of recognitions, imageHeight and width to the variables defined here as callback
-  */
+  endTfModel() async {
+    await await Tflite.close();
+  }
+
   setRecognitions(recognitions, imageHeight, imageWidth) {
     setState(() {
       _recognitions = recognitions;
@@ -40,7 +42,7 @@ class _LiveFeedState extends State<LiveFeed> {
   @override
   void initState() {
     super.initState();
-    loadTfModel();
+    // loadTfModel();
   }
 
   @override
