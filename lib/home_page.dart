@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'archive_page.dart';
 import 'camera_page.dart';
+import 'detection/live_camera.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -65,7 +66,7 @@ class _MainPageState extends State<HomePage> {
         },
         children: <Widget>[
           Archive(),
-          CameraPage(),
+          LiveFeed(cameras),
         ],
       ),
     );
