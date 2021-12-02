@@ -1,7 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hci/home_page.dart';
 
 import 'camera_page.dart';
 import 'splash_screen.dart';
@@ -13,7 +12,7 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(
-      MyApp(),
+      const MyApp(),
     );
   });
 }

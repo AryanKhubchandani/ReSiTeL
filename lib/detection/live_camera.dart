@@ -47,9 +47,6 @@ class _LiveFeedState extends State<LiveFeed> {
   Widget build(BuildContext context) {
     Size screen = MediaQuery.of(context).size;
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("Real Time Object Detection"),
-      // ),
       body: Stack(
         children: <Widget>[
           CameraFeed(widget.cameras, setRecognitions),

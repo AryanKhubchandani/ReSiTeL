@@ -5,17 +5,16 @@ import 'package:tflite/tflite.dart';
 import 'dart:math' as math;
 
 import '../camera_page.dart';
+import '../message.dart';
 
 typedef void Callback(List<dynamic> list, int h, int w);
 FlashMode? _currentFlashMode;
-bool _isRearCameraSelected = false;
+bool _isFrontCameraSelected = true;
 bool _isFlashOn = false;
 
 class CameraFeed extends StatefulWidget {
   final List<CameraDescription> cameras;
   final Callback setRecognitions;
-  // The cameraFeed Class takes the cameras list and the setRecognitions
-  // function as argument
   CameraFeed(this.cameras, this.setRecognitions);
 
   @override
@@ -24,7 +23,6 @@ class CameraFeed extends StatefulWidget {
 
 class _CameraFeedState extends State<CameraFeed> {
   late CameraController controller;
-  bool _isCameraInitialized = false;
   bool isDetecting = false;
   late AnimateIconController animatedController;
 
@@ -60,17 +58,17 @@ class _CameraFeedState extends State<CameraFeed> {
     // Initialize controller
     try {
       await cameraController.initialize();
-      _currentFlashMode = controller!.value.flashMode;
+      _currentFlashMode = controller.value.flashMode;
     } on CameraException catch (e) {
       print('Error initializing camera: $e');
     }
 
-    // Update the boolean
-    if (mounted) {
-      setState(() {
-        _isCameraInitialized = controller!.value.isInitialized;
-      });
-    }
+    // // Update the boolean
+    // if (mounted) {
+    //   setState(() {
+    //     _isCameraInitialized = controller.value.isInitialized;
+    //   });
+    // }
   }
 
   @override
@@ -188,14 +186,14 @@ class _CameraFeedState extends State<CameraFeed> {
               children: [
                 InkWell(
                   onTap: () {
-                    setState(() {
-                      _isCameraInitialized = false;
-                    });
+                    // setState(() {
+                    //   _isCameraInitialized = false;
+                    // });
                     onNewCameraSelected(
-                      cameras[_isRearCameraSelected ? 0 : 1],
+                      cameras[_isFrontCameraSelected ? 0 : 1],
                     );
                     setState(() {
-                      _isRearCameraSelected = !_isRearCameraSelected;
+                      _isFrontCameraSelected = !_isFrontCameraSelected;
                     });
                   },
                   child: Stack(
@@ -207,7 +205,7 @@ class _CameraFeedState extends State<CameraFeed> {
                         size: 60,
                       ),
                       Icon(
-                        _isRearCameraSelected
+                        _isFrontCameraSelected
                             ? Icons.camera_rear
                             : Icons.camera_front,
                         color: Colors.white,
@@ -232,7 +230,9 @@ class _CameraFeedState extends State<CameraFeed> {
                       startIconColor: Colors.green,
                       endIconColor: Colors.red,
                       onEndIconPress: () {
+                        message(context);
                         print("Stop button pressed");
+
                         return true;
                       },
                       onStartIconPress: () {

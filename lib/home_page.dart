@@ -65,7 +65,7 @@ class _MainPageState extends State<HomePage> {
           });
         },
         children: <Widget>[
-          Archive(),
+          const Archive(),
           LiveFeed(cameras),
         ],
       ),
