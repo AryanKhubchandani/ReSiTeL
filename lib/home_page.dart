@@ -67,6 +67,7 @@ class _MainPageState extends State<HomePage> {
         children: <Widget>[
           const Archive(),
           LiveFeed(cameras),
+          // CameraPage(),
         ],
       ),
     );
