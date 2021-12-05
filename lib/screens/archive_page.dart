@@ -17,7 +17,7 @@ class _ArchiveState extends State<Archive> {
     return Scaffold(
       body: AnimationLimiter(
         child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection("archive").snapshots(),
+          stream: FirebaseFirestore.instance.collection("messages").snapshots(),
           builder: (context, snapshot) {
             return !snapshot.hasData
                 ? const Center(
@@ -39,11 +39,14 @@ class _ArchiveState extends State<Archive> {
                                 key: const ValueKey(0),
                                 startActionPane: ActionPane(
                                   motion: const ScrollMotion(),
-                                  dismissible:
-                                      DismissiblePane(onDismissed: () {}),
+                                  dismissible: DismissiblePane(onDismissed: () {
+                                    deleteProduct(archive.id);
+                                  }),
                                   children: [
                                     SlidableAction(
-                                      onPressed: (BuildContext context) {},
+                                      onPressed: (BuildContext context) {
+                                        deleteProduct(archive.id);
+                                      },
                                       backgroundColor: const Color(0xFFFE4A49),
                                       foregroundColor: Colors.white,
                                       icon: Icons.delete,
@@ -56,7 +59,7 @@ class _ArchiveState extends State<Archive> {
                                   children: [
                                     SlidableAction(
                                       onPressed: (BuildContext context) {
-                                        Share.share('');
+                                        Share.share(archive['content']);
                                       },
                                       backgroundColor: const Color(0xFF21B7CA),
                                       foregroundColor: Colors.white,
@@ -90,4 +93,8 @@ class _ArchiveState extends State<Archive> {
       ),
     );
   }
+}
+
+Future<void> deleteProduct(String content) async {
+  await FirebaseFirestore.instance.collection("messages").doc(content).delete();
 }
