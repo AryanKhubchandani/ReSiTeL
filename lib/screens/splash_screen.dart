@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hci/title.dart';
-import 'circles.dart';
+import 'package:hci/models/title.dart';
+import '../models/circles.dart';
 import 'home_page.dart';
 import 'dart:async';
 import 'package:flutter/scheduler.dart' show timeDilation;

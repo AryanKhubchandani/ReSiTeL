@@ -1,10 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hci/home_page.dart';
+import 'package:hci/screens/home_page.dart';
 
-import 'camera_page.dart';
-import 'splash_screen.dart';
+import 'screens/camera_page.dart';
+import 'screens/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
