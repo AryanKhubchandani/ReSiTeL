@@ -4,8 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:hci/screens/camera.dart';
 
-List<String> archive = [];
-
 class FinalMessage extends StatelessWidget {
   final List<String> finalText;
 
@@ -40,7 +38,6 @@ class FinalMessage extends StatelessWidget {
             TextButton(
               child: const Text("Share"),
               onPressed: () {
-                // archive.add(finalText.join());
                 uploadingData(finalText.join());
                 Share.share(finalText.join());
                 Navigator.of(context).pop();
@@ -55,7 +52,7 @@ class FinalMessage extends StatelessWidget {
 }
 
 Future<void> uploadingData(String content) async {
-  await FirebaseFirestore.instance.collection("archive").add({
+  await FirebaseFirestore.instance.collection("messages").add({
     'content': content,
   });
 }
