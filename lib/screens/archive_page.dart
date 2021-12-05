@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:share_plus/share_plus.dart';
 
 class Archive extends StatefulWidget {
   const Archive({Key? key}) : super(key: key);
@@ -44,7 +45,9 @@ class _ArchiveState extends State<Archive> {
                         motion: const ScrollMotion(),
                         children: [
                           SlidableAction(
-                            onPressed: (BuildContext context) {},
+                            onPressed: (BuildContext context) {
+                              Share.share('');
+                            },
                             backgroundColor: const Color(0xFF21B7CA),
                             foregroundColor: Colors.white,
                             icon: Icons.share,
