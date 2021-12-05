@@ -5,7 +5,7 @@ import 'package:animate_icons/animate_icons.dart';
 
 List<CameraDescription> cameras = [];
 FlashMode? _currentFlashMode;
-bool _isRearCameraSelected = false;
+bool _isFrontCameraSelected = true;
 bool _isFlashOn = false;
 
 class CameraPage extends StatefulWidget {
@@ -84,26 +84,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  // bool onEndIconPress(BuildContext context) {
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     SnackBar(
-  //       content: Text("Stop"),
-  //       duration: Duration(seconds: 1),
-  //     ),
-  //   );
-  //   return true;
-  // }
-
-  // bool onStartIconPress(BuildContext context) {
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     SnackBar(
-  //       content: Text("Record"),
-  //       duration: Duration(seconds: 1),
-  //     ),
-  //   );
-  //   return true;
-  // }
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final CameraController? cameraController = controller;
@@ -122,15 +102,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     }
   }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     if (!controller.value.isInitialized) {
-//       return Container();
-//     }
-//     return MaterialApp(
-//       home: CameraPreview(controller),
-//     );
-//   }
 // }
   @override
   Widget build(BuildContext context) {
@@ -178,10 +149,10 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                           _isCameraInitialized = false;
                         });
                         onNewCameraSelected(
-                          cameras[_isRearCameraSelected ? 0 : 1],
+                          cameras[_isFrontCameraSelected ? 0 : 1],
                         );
                         setState(() {
-                          _isRearCameraSelected = !_isRearCameraSelected;
+                          _isFrontCameraSelected = !_isFrontCameraSelected;
                         });
                       },
                       child: Stack(
@@ -193,7 +164,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                             size: 60,
                           ),
                           Icon(
-                            _isRearCameraSelected
+                            _isFrontCameraSelected
                                 ? Icons.camera_rear
                                 : Icons.camera_front,
                             color: Colors.white,
