@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:hci/screens/camera.dart';
 
-import 'package:share_plus/share_plus.dart';
+List<String> archive = [];
 
 class FinalMessage extends StatelessWidget {
   final List<String> finalText;
@@ -30,12 +33,15 @@ class FinalMessage extends StatelessWidget {
               ),
               onPressed: () {
                 CameraFeedState().finalText = [];
+
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
               child: const Text("Share"),
               onPressed: () {
+                // archive.add(finalText.join());
+                uploadingData(finalText.join());
                 Share.share(finalText.join());
                 Navigator.of(context).pop();
                 CameraFeedState().finalText = [];
@@ -46,4 +52,10 @@ class FinalMessage extends StatelessWidget {
       ],
     );
   }
+}
+
+Future<void> uploadingData(String content) async {
+  await FirebaseFirestore.instance.collection("archive").add({
+    'content': content,
+  });
 }
