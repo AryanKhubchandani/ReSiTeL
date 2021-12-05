@@ -19,14 +19,15 @@ class CameraFeed extends StatefulWidget {
   CameraFeed(this.cameras, this.setRecognitions);
 
   @override
-  _CameraFeedState createState() => _CameraFeedState();
+  CameraFeedState createState() => CameraFeedState();
 }
 
-class _CameraFeedState extends State<CameraFeed> {
+class CameraFeedState extends State<CameraFeed> {
   late CameraController controller;
   bool isDetecting = false;
   late AnimateIconController animatedController;
   LiveFeedState liveFeedState = LiveFeedState();
+  List<String> finalText = [];
 
   void onNewCameraSelected(CameraDescription cameraDescription) async {
     final previousCameraController = controller;
@@ -112,6 +113,11 @@ class _CameraFeedState extends State<CameraFeed> {
               When setRecognitions is called here, the parameters are being passed on to the parent widget as callback. i.e. to the LiveFeed class
                */
               widget.setRecognitions(recognitions!, img.height, img.width);
+              print("HERE IS THE OBJECT LIST");
+              print(recognitions[0]['detectedClass']);
+              if (recognitions[0]['confidenceInClass'] * 100 > 70) {
+                finalText.add(recognitions[0]['detectedClass']);
+              }
               isDetecting = false;
             });
           }
@@ -159,6 +165,7 @@ class _CameraFeedState extends State<CameraFeed> {
                   children: [
                     // controller!.buildPreview(),
                     CameraPreview(controller),
+
                     Padding(
                       padding: const EdgeInsets.fromLTRB(
                         16.0,
@@ -246,14 +253,17 @@ class _CameraFeedState extends State<CameraFeed> {
                   ],
                 ),
               ),
+              Container(
+                  width: double.infinity,
+                  color: Colors.yellow,
+                  child: Text(finalText.join())),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   InkWell(
                     onTap: () {
-                      // setState(() {
-                      //   _isCameraInitialized = false;
-                      // });
+                      finalText.removeLast();
+                      setState(() {});
                     },
                     child: Stack(
                       alignment: Alignment.center,
@@ -288,19 +298,29 @@ class _CameraFeedState extends State<CameraFeed> {
                         endIconColor: Colors.red,
                         onStartIconPress: () {
                           liveFeedState.loadTfModel();
+                          setState(() {});
                           return true;
                         },
                         onEndIconPress: () {
-                          message(context);
-                          print("Stop button pressed");
                           liveFeedState.endTfModel();
+
+                          showDialog<void>(
+                              context: context,
+                              barrierDismissible:
+                                  false, // user must tap button!
+                              builder: (BuildContext context) {
+                                return FinalMessage(finalText: finalText);
+                              });
+                          print("Stop button pressed");
+
                           return true;
                         },
                       ),
                     ],
                   ),
                   InkWell(
-                      onTap: () async {
+                      onTap: () {
+                        finalText.add(" ");
                         setState(() {});
                       },
                       child: Stack(

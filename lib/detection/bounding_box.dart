@@ -18,6 +18,7 @@ class BoundingBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> convertedText = [];
     List<Widget> _renderBox() {
       return results.map((re) {
         var _x = re["rect"]["x"];

@@ -1,45 +1,63 @@
+import 'dart:ffi';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hci/detection/camera.dart';
 
 import 'package:share_plus/share_plus.dart';
 
-Future<void> message(BuildContext context) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Message'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: const <Widget>[
-              Text('Lorem ipsum dolor sit amet, consectetur.......'),
-            ],
-          ),
+List<String> archive = [];
+
+class FinalMessage extends StatelessWidget {
+  final List<String> finalText;
+
+  FinalMessage({required this.finalText});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Message'),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            Text(finalText.join()),
+          ],
         ),
-        actions: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                child: const Text(
-                  'Delete',
-                  style: TextStyle(color: Colors.red),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+      ),
+      actions: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: Colors.red),
               ),
-              TextButton(
-                child: const Text('Share'),
-                onPressed: () {
-                  Share.share('check out my website https://example.com');
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        ],
-      );
-    },
-  );
+              onPressed: () {
+                CameraFeedState().finalText = [];
+
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Share"),
+              onPressed: () {
+                // archive.add(finalText.join());
+                uploadingData(finalText.join());
+                Share.share(finalText.join());
+                Navigator.of(context).pop();
+                CameraFeedState().finalText = [];
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+Future<void> uploadingData(String content) async {
+  await FirebaseFirestore.instance.collection("archive").add({
+    'content': content,
+  });
 }
