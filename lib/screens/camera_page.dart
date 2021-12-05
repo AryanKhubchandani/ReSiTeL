@@ -131,7 +131,71 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                               children: [
                                 const Spacer(),
                                 Column(
-                                  children: [],
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        // setState(() {
+                                        //   _isCameraInitialized = false;
+                                        // });
+                                        onNewCameraSelected(
+                                          cameras[
+                                              _isFrontCameraSelected ? 0 : 1],
+                                        );
+                                        setState(() {
+                                          _isFrontCameraSelected =
+                                              !_isFrontCameraSelected;
+                                          _isFlashOn = false;
+                                        });
+                                      },
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.circle,
+                                            color: Colors.black38,
+                                            size: 60,
+                                          ),
+                                          Icon(
+                                            _isFrontCameraSelected
+                                                ? Icons.camera_rear
+                                                : Icons.camera_front,
+                                            color: Colors.white,
+                                            size: 30,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    InkWell(
+                                        onTap: () async {
+                                          setState(() {
+                                            _isFlashOn = !_isFlashOn;
+                                            _currentFlashMode =
+                                                FlashMode.always;
+                                          });
+                                          _isFlashOn
+                                              ? controller!
+                                                  .setFlashMode(FlashMode.torch)
+                                              : controller!
+                                                  .setFlashMode(FlashMode.off);
+                                        },
+                                        child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            const Icon(
+                                              Icons.circle,
+                                              color: Colors.black38,
+                                              size: 60,
+                                            ),
+                                            Icon(
+                                              _isFlashOn
+                                                  ? Icons.flash_on
+                                                  : Icons.flash_off,
+                                              color: Colors.white,
+                                              size: 30,
+                                            ),
+                                          ],
+                                        )),
+                                  ],
                                 ),
                               ],
                             ),
@@ -145,30 +209,18 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     InkWell(
-                      onTap: () {
-                        setState(() {
-                          _isCameraInitialized = false;
-                        });
-                        onNewCameraSelected(
-                          cameras[_isFrontCameraSelected ? 0 : 1],
-                        );
-                        setState(() {
-                          _isFrontCameraSelected = !_isFrontCameraSelected;
-                        });
-                      },
+                      onTap: () {},
                       child: Stack(
                         alignment: Alignment.center,
-                        children: [
-                          const Icon(
+                        children: const [
+                          Icon(
                             Icons.circle,
                             color: Colors.black38,
                             size: 60,
                           ),
                           Icon(
-                            _isFrontCameraSelected
-                                ? Icons.camera_rear
-                                : Icons.camera_front,
-                            color: Colors.white,
+                            Icons.backspace,
+                            color: Colors.red,
                             size: 30,
                           ),
                         ],
@@ -189,45 +241,36 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                           size: 60.0,
                           startIconColor: Colors.green,
                           endIconColor: Colors.red,
+                          onStartIconPress: () {
+                            return true;
+                          },
                           onEndIconPress: () {
                             showDialog<void>(
                                 context: context,
-                                barrierDismissible:
-                                    false, // user must tap button!
+                                barrierDismissible: false,
                                 builder: (BuildContext context) {
                                   return FinalMessage();
                                 });
                             print("Stop button pressed");
-                            return true;
-                          },
-                          onStartIconPress: () {
-                            print("Start button pressed");
+
                             return true;
                           },
                         ),
                       ],
                     ),
                     InkWell(
-                        onTap: () async {
-                          setState(() {
-                            _isFlashOn = !_isFlashOn;
-                            _currentFlashMode = FlashMode.always;
-                          });
-                          _isFlashOn
-                              ? controller!.setFlashMode(FlashMode.torch)
-                              : controller!.setFlashMode(FlashMode.off);
-                        },
+                        onTap: () {},
                         child: Stack(
                           alignment: Alignment.center,
-                          children: [
-                            const Icon(
+                          children: const [
+                            Icon(
                               Icons.circle,
                               color: Colors.black38,
                               size: 60,
                             ),
                             Icon(
-                              _isFlashOn ? Icons.flash_on : Icons.flash_off,
-                              color: Colors.white,
+                              Icons.space_bar,
+                              color: Colors.blue,
                               size: 30,
                             ),
                           ],
