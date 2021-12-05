@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:hci/models/detection/live_camera.dart';
 import 'archive_page.dart';
 import 'camera_page.dart';
 
@@ -65,7 +66,7 @@ class _MainPageState extends State<HomePage> {
         },
         children: <Widget>[
           Archive(),
-          CameraPage(),
+          LiveFeed(cameras),
         ],
       ),
     );
