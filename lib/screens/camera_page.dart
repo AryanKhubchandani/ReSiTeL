@@ -205,6 +205,11 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                     ],
                   ),
                 ),
+                Container(
+                  width: double.infinity,
+                  color: Colors.yellow,
+                  child: Text(""),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
