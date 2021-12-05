@@ -147,13 +147,6 @@ class CameraFeedState extends State<CameraFeed> {
     var screenRatio = screenH / screenW;
     var previewRatio = previewH / previewW;
 
-    // return OverflowBox(
-    //   maxHeight:
-    //       screenRatio > previewRatio ? screenH : screenW / previewW * previewH,
-    //   maxWidth:
-    //       screenRatio > previewRatio ? screenH / previewH * previewW : screenW,
-    //   child: CameraPreview(controller),
-    // );
     return Scaffold(
         backgroundColor: Colors.black,
         body: SingleChildScrollView(
@@ -309,7 +302,7 @@ class CameraFeedState extends State<CameraFeed> {
                               barrierDismissible:
                                   false, // user must tap button!
                               builder: (BuildContext context) {
-                                return FinalMessage();
+                                return FinalMessage(finalText: finalText);
                               });
                           print("Stop button pressed");
 

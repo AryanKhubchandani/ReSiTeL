@@ -1,10 +1,13 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:hci/screens/camera.dart';
 
 import 'package:share_plus/share_plus.dart';
 
 class FinalMessage extends StatelessWidget {
+  final List<String> finalText;
+
+  FinalMessage({required this.finalText});
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -12,7 +15,7 @@ class FinalMessage extends StatelessWidget {
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            Text("THIS IS SAMPLE"),
+            Text(finalText.join()),
           ],
         ),
       ),
@@ -26,14 +29,16 @@ class FinalMessage extends StatelessWidget {
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () {
+                CameraFeedState().finalText = [];
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text("Share"),
+              child: const Text("Share"),
               onPressed: () {
-                Share.share("");
+                Share.share(finalText.join());
                 Navigator.of(context).pop();
+                CameraFeedState().finalText = [];
               },
             ),
           ],
