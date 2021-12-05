@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:animate_icons/animate_icons.dart';
+import 'package:hci/screens/message.dart';
 
 List<CameraDescription> cameras = [];
 FlashMode? _currentFlashMode;
@@ -189,6 +190,13 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                           startIconColor: Colors.green,
                           endIconColor: Colors.red,
                           onEndIconPress: () {
+                            showDialog<void>(
+                                context: context,
+                                barrierDismissible:
+                                    false, // user must tap button!
+                                builder: (BuildContext context) {
+                                  return FinalMessage();
+                                });
                             print("Stop button pressed");
                             return true;
                           },
