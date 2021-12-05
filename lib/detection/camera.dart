@@ -26,6 +26,7 @@ class _CameraFeedState extends State<CameraFeed> {
   late CameraController controller;
   bool isDetecting = false;
   late AnimateIconController animatedController;
+  LiveFeedState liveFeedState = LiveFeedState();
 
   void onNewCameraSelected(CameraDescription cameraDescription) async {
     final previousCameraController = controller;
@@ -149,129 +150,178 @@ class _CameraFeedState extends State<CameraFeed> {
     // );
     return Scaffold(
         backgroundColor: Colors.black,
-        body: Column(
-          children: [
-            AspectRatio(
-              aspectRatio: 1 / controller.value.aspectRatio,
-              child: Stack(
-                children: [
-                  // controller!.buildPreview(),
-                  CameraPreview(controller),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      16.0,
-                      8.0,
-                      16.0,
-                      8.0,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            const Spacer(),
-                            Column(
-                              children: const [],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InkWell(
-                  onTap: () {
-                    // setState(() {
-                    //   _isCameraInitialized = false;
-                    // });
-                    onNewCameraSelected(
-                      cameras[_isFrontCameraSelected ? 0 : 1],
-                    );
-                    setState(() {
-                      _isFrontCameraSelected = !_isFrontCameraSelected;
-                      _isFlashOn = false;
-                    });
-                  },
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      const Icon(
-                        Icons.circle,
-                        color: Colors.black38,
-                        size: 60,
-                      ),
-                      Icon(
-                        _isFrontCameraSelected
-                            ? Icons.camera_rear
-                            : Icons.camera_front,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                    ],
-                  ),
-                ),
-                Stack(
-                  alignment: Alignment.center,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              AspectRatio(
+                aspectRatio: 1 / controller.value.aspectRatio,
+                child: Stack(
                   children: [
-                    const Icon(
-                      Icons.circle,
-                      color: Colors.black38,
-                      size: 80.0,
-                    ),
-                    AnimateIcons(
-                      startIcon: Icons.play_arrow,
-                      endIcon: Icons.stop,
-                      controller: animatedController,
-                      size: 60.0,
-                      startIconColor: Colors.green,
-                      endIconColor: Colors.red,
-                      onStartIconPress: () {
-                        LiveFeedState().loadTfModel();
-                        return true;
-                      },
-                      onEndIconPress: () {
-                        message(context);
-                        print("Stop button pressed");
-                        LiveFeedState().endTfModel();
-                        return true;
-                      },
+                    // controller!.buildPreview(),
+                    CameraPreview(controller),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        16.0,
+                        8.0,
+                        16.0,
+                        8.0,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const Spacer(),
+                              Column(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      // setState(() {
+                                      //   _isCameraInitialized = false;
+                                      // });
+                                      onNewCameraSelected(
+                                        cameras[_isFrontCameraSelected ? 0 : 1],
+                                      );
+                                      setState(() {
+                                        _isFrontCameraSelected =
+                                            !_isFrontCameraSelected;
+                                        _isFlashOn = false;
+                                      });
+                                    },
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.circle,
+                                          color: Colors.black38,
+                                          size: 60,
+                                        ),
+                                        Icon(
+                                          _isFrontCameraSelected
+                                              ? Icons.camera_rear
+                                              : Icons.camera_front,
+                                          color: Colors.white,
+                                          size: 30,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  InkWell(
+                                      onTap: () async {
+                                        setState(() {
+                                          _isFlashOn = !_isFlashOn;
+                                          _currentFlashMode = FlashMode.always;
+                                        });
+                                        _isFlashOn
+                                            ? controller
+                                                .setFlashMode(FlashMode.torch)
+                                            : controller
+                                                .setFlashMode(FlashMode.off);
+                                      },
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.circle,
+                                            color: Colors.black38,
+                                            size: 60,
+                                          ),
+                                          Icon(
+                                            _isFlashOn
+                                                ? Icons.flash_on
+                                                : Icons.flash_off,
+                                            color: Colors.white,
+                                            size: 30,
+                                          ),
+                                        ],
+                                      )),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                InkWell(
-                    onTap: () async {
-                      setState(() {
-                        _isFlashOn = !_isFlashOn;
-                        _currentFlashMode = FlashMode.always;
-                      });
-                      _isFlashOn
-                          ? controller.setFlashMode(FlashMode.torch)
-                          : controller.setFlashMode(FlashMode.off);
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      // setState(() {
+                      //   _isCameraInitialized = false;
+                      // });
                     },
                     child: Stack(
                       alignment: Alignment.center,
-                      children: [
-                        const Icon(
+                      children: const [
+                        Icon(
                           Icons.circle,
                           color: Colors.black38,
                           size: 60,
                         ),
                         Icon(
-                          _isFlashOn ? Icons.flash_on : Icons.flash_off,
-                          color: Colors.white,
+                          Icons.backspace,
+                          color: Colors.red,
                           size: 30,
                         ),
                       ],
-                    )),
-              ],
-            ),
-          ],
+                    ),
+                  ),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      const Icon(
+                        Icons.circle,
+                        color: Colors.black38,
+                        size: 80.0,
+                      ),
+                      AnimateIcons(
+                        startIcon: Icons.play_arrow,
+                        endIcon: Icons.stop,
+                        controller: animatedController,
+                        size: 60.0,
+                        startIconColor: Colors.green,
+                        endIconColor: Colors.red,
+                        onStartIconPress: () {
+                          liveFeedState.loadTfModel();
+                          return true;
+                        },
+                        onEndIconPress: () {
+                          message(context);
+                          print("Stop button pressed");
+                          liveFeedState.endTfModel();
+                          return true;
+                        },
+                      ),
+                    ],
+                  ),
+                  InkWell(
+                      onTap: () async {
+                        setState(() {});
+                      },
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: const [
+                          Icon(
+                            Icons.circle,
+                            color: Colors.black38,
+                            size: 60,
+                          ),
+                          Icon(
+                            Icons.space_bar,
+                            color: Colors.blue,
+                            size: 30,
+                          ),
+                        ],
+                      )),
+                ],
+              ),
+            ],
+          ),
         )
         // : const Center(
         //     child: Text(
