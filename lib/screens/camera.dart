@@ -94,34 +94,36 @@ class CameraFeedState extends State<CameraFeed> {
         }
         setState(() {});
 
-        controller.startImageStream((CameraImage img) {
-          if (!isDetecting) {
-            isDetecting = true;
-            Tflite.detectObjectOnFrame(
-              bytesList: img.planes.map((plane) {
-                return plane.bytes;
-              }).toList(),
-              model: "SSDMobileNet",
-              imageHeight: img.height,
-              imageWidth: img.width,
-              imageMean: 127.5,
-              imageStd: 127.5,
-              numResultsPerClass: 1,
-              threshold: 0.4,
-            ).then((recognitions) {
-              /*
-              When setRecognitions is called here, the parameters are being passed on to the parent widget as callback. i.e. to the LiveFeed class
-               */
-              widget.setRecognitions(recognitions!, img.height, img.width);
-              print("HERE IS THE OBJECT LIST");
-              print(recognitions[0]['detectedClass']);
-              if (recognitions[0]['confidenceInClass'] * 100 > 70) {
-                finalText.add(recognitions[0]['detectedClass']);
-              }
-              isDetecting = false;
-            });
-          }
-        });
+        // controller.startImageStream((CameraImage img) {
+        //   if (!isDetecting) {
+        //     isDetecting = true;
+        //     Tflite.detectObjectOnFrame(
+        //       bytesList: img.planes.map((plane) {
+        //         return plane.bytes;
+        //       }).toList(),
+        //       model: "SSDMobileNet",
+        //       imageHeight: img.height,
+        //       imageWidth: img.width,
+        //       imageMean: 127.5,
+        //       imageStd: 127.5,
+        //       numResultsPerClass: 1,
+        //       threshold: 0.4,
+        //     )
+        //         .then((recognitions) {
+        //       /*
+        //       When setRecognitions is called here, the parameters are being passed on to the parent widget as callback. i.e. to the LiveFeed class
+        //        */
+        //       widget.setRecognitions(recognitions!, img.height, img.width);
+        //       print("HERE IS THE OBJECT LIST");
+        //       print(recognitions[0]['detectedClass']);
+        //       if (recognitions[0]['confidenceInClass'] * 100 > 70) {
+        //         finalText.add(recognitions[0]['detectedClass']);
+        //       }
+        //       isDetecting = false;
+        //     });
+        //   }
+        // }
+        // );
       });
     }
   }
@@ -195,14 +197,14 @@ class CameraFeedState extends State<CameraFeed> {
                                         const Icon(
                                           Icons.circle,
                                           color: Colors.black38,
-                                          size: 60,
+                                          size: 45,
                                         ),
                                         Icon(
                                           _isFrontCameraSelected
                                               ? Icons.camera_rear
                                               : Icons.camera_front,
                                           color: Colors.white,
-                                          size: 30,
+                                          size: 25,
                                         ),
                                       ],
                                     ),
@@ -225,14 +227,14 @@ class CameraFeedState extends State<CameraFeed> {
                                           const Icon(
                                             Icons.circle,
                                             color: Colors.black38,
-                                            size: 60,
+                                            size: 45,
                                           ),
                                           Icon(
                                             _isFlashOn
                                                 ? Icons.flash_on
                                                 : Icons.flash_off,
                                             color: Colors.white,
-                                            size: 30,
+                                            size: 25,
                                           ),
                                         ],
                                       )),
@@ -248,8 +250,15 @@ class CameraFeedState extends State<CameraFeed> {
               ),
               Container(
                   width: double.infinity,
-                  color: Colors.yellow,
-                  child: Text(finalText.join())),
+                  decoration: BoxDecoration(
+                      color: Colors.yellow,
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 2.0,
+                      )),
+                  child: Text(
+                    finalText.join(),
+                  )),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -290,8 +299,38 @@ class CameraFeedState extends State<CameraFeed> {
                         startIconColor: Colors.green,
                         endIconColor: Colors.red,
                         onStartIconPress: () {
-                          liveFeedState.loadTfModel();
-                          setState(() {});
+                          controller.startImageStream((CameraImage img) {
+                            if (!isDetecting) {
+                              isDetecting = true;
+                              Tflite.detectObjectOnFrame(
+                                bytesList: img.planes.map((plane) {
+                                  return plane.bytes;
+                                }).toList(),
+                                model: "EfficientNet",
+                                imageHeight: img.height,
+                                imageWidth: img.width,
+                                imageMean: 127.5,
+                                imageStd: 127.5,
+                                numResultsPerClass: 1,
+                                threshold: 0.4,
+                              ).then((recognitions) {
+                                /*
+              When setRecognitions is called here, the parameters are being passed on to the parent widget as callback. i.e. to the LiveFeed class
+               */
+                                widget.setRecognitions(
+                                    recognitions!, img.height, img.width);
+                                print("HERE IS THE OBJECT LIST");
+                                print(recognitions[0]['detectedClass']);
+                                if (recognitions[0]['confidenceInClass'] * 100 >
+                                    70) {
+                                  finalText
+                                      .add(recognitions[0]['detectedClass']);
+                                }
+                                isDetecting = false;
+                              });
+                            }
+                          });
+                          // didUpdateWidget(CameraFeed(cameras, (list, h, w) {}));
                           return true;
                         },
                         onEndIconPress: () {
@@ -304,8 +343,6 @@ class CameraFeedState extends State<CameraFeed> {
                               builder: (BuildContext context) {
                                 return FinalMessage(finalText: finalText);
                               });
-                          print("Stop button pressed");
-
                           return true;
                         },
                       ),
