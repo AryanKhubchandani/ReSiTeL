@@ -15,6 +15,21 @@ class _ArchiveState extends State<Archive> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        elevation: 0.0,
+        title: const Text(
+          "Archived Messages",
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
+        ),
+      ),
       body: AnimationLimiter(
         child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance.collection("messages").snapshots(),
@@ -69,6 +84,9 @@ class _ArchiveState extends State<Archive> {
                                   ],
                                 ),
                                 child: Card(
+                                  color: Colors.white,
+                                  elevation: 5.0,
+                                  shadowColor: Colors.black,
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
