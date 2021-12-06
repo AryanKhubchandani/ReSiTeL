@@ -8,11 +8,11 @@ class TitleText extends StatelessWidget {
         text: const TextSpan(
             text: "Re",
             style: TextStyle(
-                fontSize: 40, color: Colors.red, fontWeight: FontWeight.bold),
+                fontSize: 40, color: Colors.pink, fontWeight: FontWeight.bold),
             children: <TextSpan>[
               TextSpan(
                 text: "Si",
-                style: TextStyle(fontSize: 40, color: Colors.green),
+                style: TextStyle(fontSize: 40, color: Colors.blue),
               ),
               TextSpan(
                 text: "Te",
@@ -20,7 +20,7 @@ class TitleText extends StatelessWidget {
               ),
               TextSpan(
                 text: "L",
-                style: TextStyle(fontSize: 40, color: Colors.blue),
+                style: TextStyle(fontSize: 40, color: Colors.orange),
               ),
             ]),
       ),

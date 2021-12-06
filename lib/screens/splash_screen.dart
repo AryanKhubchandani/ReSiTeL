@@ -233,7 +233,7 @@ class SplashScreenState extends State<SplashScreen>
                   Transform(
                     transform: matrix1,
                     child: Circle(
-                        color: Colors.cyan,
+                        color: const Color(0xff3EB489),
                         diameter: circleDiameter,
                         n: 1,
                         padding: p1),
@@ -243,7 +243,7 @@ class SplashScreenState extends State<SplashScreen>
                     child: Opacity(
                       opacity: 0.8,
                       child: Circle(
-                          color: Colors.yellow,
+                          color: const Color(0xff246EE9),
                           diameter: circleDiameter,
                           n: 2,
                           padding: p2),
