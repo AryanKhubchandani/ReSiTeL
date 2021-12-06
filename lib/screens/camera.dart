@@ -1,6 +1,7 @@
 import 'package:animate_icons/animate_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/services.dart';
 import 'package:hci/models/detection/live_camera.dart';
 import 'package:hci/screens/message.dart';
 import 'package:tflite/tflite.dart';
@@ -179,6 +180,7 @@ class CameraFeedState extends State<CameraFeed> {
                                 children: [
                                   InkWell(
                                     onTap: () {
+                                      HapticFeedback.lightImpact();
                                       // setState(() {
                                       //   _isCameraInitialized = false;
                                       // });
@@ -211,6 +213,7 @@ class CameraFeedState extends State<CameraFeed> {
                                   ),
                                   InkWell(
                                       onTap: () async {
+                                        HapticFeedback.lightImpact();
                                         setState(() {
                                           _isFlashOn = !_isFlashOn;
                                           _currentFlashMode = FlashMode.always;
@@ -264,6 +267,7 @@ class CameraFeedState extends State<CameraFeed> {
                 children: [
                   InkWell(
                     onTap: () {
+                      HapticFeedback.lightImpact();
                       finalText.removeLast();
                       setState(() {});
                     },
@@ -299,6 +303,7 @@ class CameraFeedState extends State<CameraFeed> {
                         startIconColor: Colors.green,
                         endIconColor: Colors.red,
                         onStartIconPress: () {
+                          HapticFeedback.lightImpact();
                           controller.startImageStream((CameraImage img) {
                             if (!isDetecting) {
                               isDetecting = true;
@@ -335,7 +340,7 @@ class CameraFeedState extends State<CameraFeed> {
                         },
                         onEndIconPress: () {
                           liveFeedState.endTfModel();
-
+                          HapticFeedback.lightImpact();
                           showDialog<void>(
                               context: context,
                               barrierDismissible:
@@ -350,6 +355,7 @@ class CameraFeedState extends State<CameraFeed> {
                   ),
                   InkWell(
                       onTap: () {
+                        HapticFeedback.lightImpact();
                         finalText.add(" ");
                         setState(() {});
                       },

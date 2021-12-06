@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:share_plus/share_plus.dart';
@@ -55,11 +56,13 @@ class _ArchiveState extends State<Archive> {
                                 startActionPane: ActionPane(
                                   motion: const ScrollMotion(),
                                   dismissible: DismissiblePane(onDismissed: () {
+                                    HapticFeedback.mediumImpact();
                                     deleteProduct(archive.id);
                                   }),
                                   children: [
                                     SlidableAction(
                                       onPressed: (BuildContext context) {
+                                        HapticFeedback.lightImpact();
                                         deleteProduct(archive.id);
                                       },
                                       backgroundColor: const Color(0xFFFE4A49),
@@ -74,6 +77,7 @@ class _ArchiveState extends State<Archive> {
                                   children: [
                                     SlidableAction(
                                       onPressed: (BuildContext context) {
+                                        HapticFeedback.lightImpact();
                                         Share.share(archive['content']);
                                       },
                                       backgroundColor: const Color(0xFF21B7CA),

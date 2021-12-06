@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -31,13 +32,14 @@ class FinalMessage extends StatelessWidget {
               ),
               onPressed: () {
                 CameraFeedState().finalText = [];
-
+                HapticFeedback.lightImpact();
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
               child: const Text("Share"),
               onPressed: () {
+                HapticFeedback.lightImpact();
                 uploadingData(finalText.join());
                 Share.share(finalText.join());
                 Navigator.of(context).pop();
