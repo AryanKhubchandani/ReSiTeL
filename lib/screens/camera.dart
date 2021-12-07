@@ -276,8 +276,10 @@ class CameraFeedState extends State<CameraFeed> {
                   InkWell(
                     onTap: () {
                       HapticFeedback.lightImpact();
-                      finalText.removeLast();
-                      setState(() {});
+                      if (finalText.isNotEmpty) {
+                        finalText.removeLast();
+                        setState(() {});
+                      }
                     },
                     child: Stack(
                       alignment: Alignment.center,
@@ -348,6 +350,7 @@ class CameraFeedState extends State<CameraFeed> {
                         },
                         onEndIconPress: () {
                           isDetecting = false;
+
                           HapticFeedback.lightImpact();
                           showDialog<void>(
                               context: context,
