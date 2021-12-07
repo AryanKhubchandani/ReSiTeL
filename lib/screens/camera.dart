@@ -260,14 +260,17 @@ class CameraFeedState extends State<CameraFeed> {
                 //       color: Colors.black,
                 //       width: 2.0,
                 //     )),
-                child: Text(
-                  (() {
-                    if (finalText.isEmpty) {
-                      return "Your message will appear here";
-                    }
-                    return finalText.join();
-                  })(),
-                  style: const TextStyle(color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(
+                    (() {
+                      if (finalText.isEmpty) {
+                        return "Your message will appear here";
+                      }
+                      return finalText.join();
+                    })(),
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
               Row(
