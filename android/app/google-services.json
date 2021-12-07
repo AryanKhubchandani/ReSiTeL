@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "179392560215",
+    "firebase_url": "https://resitel-2ea51-default-rtdb.firebaseio.com",
     "project_id": "resitel-2ea51",
     "storage_bucket": "resitel-2ea51.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "179392560215-h333quoifemc6juo4e6gheia44eaq2qh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hci",
+            "certificate_hash": "73efaabc0ebbc383ce8d511b92d4891f171e8753"
+          }
+        },
         {
           "client_id": "179392560215-j2lud83rk2fjh9dtmrdqejptb8dhl3o8.apps.googleusercontent.com",
           "client_type": 3
