@@ -252,16 +252,24 @@ class CameraFeedState extends State<CameraFeed> {
                 ),
               ),
               Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: Colors.yellow,
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 2.0,
-                      )),
-                  child: Text(
-                    finalText.join(),
-                  )),
+                width: double.infinity,
+                color: Colors.black,
+                // decoration: BoxDecoration(
+                //     color: Colors.black,
+                //     border: Border.all(
+                //       color: Colors.black,
+                //       width: 2.0,
+                //     )),
+                child: Text(
+                  (() {
+                    if (finalText.isEmpty) {
+                      return "Your message will appear here";
+                    }
+                    return finalText.join();
+                  })(),
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -311,7 +319,7 @@ class CameraFeedState extends State<CameraFeed> {
                                 bytesList: img.planes.map((plane) {
                                   return plane.bytes;
                                 }).toList(),
-                                model: "EfficientNet",
+                                model: "SSDMobileNet",
                                 imageHeight: img.height,
                                 imageWidth: img.width,
                                 imageMean: 127.5,
@@ -339,7 +347,7 @@ class CameraFeedState extends State<CameraFeed> {
                           return true;
                         },
                         onEndIconPress: () {
-                          liveFeedState.endTfModel();
+                          isDetecting = false;
                           HapticFeedback.lightImpact();
                           showDialog<void>(
                               context: context,
