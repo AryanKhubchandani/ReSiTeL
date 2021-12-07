@@ -42,7 +42,13 @@ class LiveFeedState extends State<LiveFeed> {
   @override
   void initState() {
     super.initState();
-    // loadTfModel();
+    loadTfModel();
+  }
+
+  @override
+  void dispose() async {
+    await endTfModel();
+    super.dispose();
   }
 
   @override
