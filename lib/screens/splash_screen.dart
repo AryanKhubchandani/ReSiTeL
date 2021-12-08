@@ -7,6 +7,8 @@ import 'dart:async';
 import 'package:flutter/scheduler.dart' show timeDilation;
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
   @override
   State createState() => SplashScreenState();
 }
@@ -257,7 +259,7 @@ class SplashScreenState extends State<SplashScreen>
               ),
               FadeTransition(
                 opacity: animation,
-                child: TitleText(),
+                child: const TitleText(),
               )
             ],
           ),

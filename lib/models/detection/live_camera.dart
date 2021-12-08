@@ -9,7 +9,7 @@ import 'bounding_box.dart';
 
 class LiveFeed extends StatefulWidget {
   final List<CameraDescription> cameras;
-  LiveFeed(this.cameras);
+  const LiveFeed(this.cameras, {Key? key}) : super(key: key);
   @override
   LiveFeedState createState() => LiveFeedState();
 }

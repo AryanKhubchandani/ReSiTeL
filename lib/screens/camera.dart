@@ -18,7 +18,8 @@ bool _isFlashOn = false;
 class CameraFeed extends StatefulWidget {
   final List<CameraDescription> cameras;
   final Callback setRecognitions;
-  CameraFeed(this.cameras, this.setRecognitions);
+  const CameraFeed(this.cameras, this.setRecognitions, {Key? key})
+      : super(key: key);
 
   @override
   CameraFeedState createState() => CameraFeedState();

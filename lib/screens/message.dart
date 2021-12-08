@@ -8,7 +8,7 @@ import 'package:hci/screens/camera.dart';
 class FinalMessage extends StatelessWidget {
   final List<String> finalText;
 
-  FinalMessage({required this.finalText});
+  const FinalMessage({Key? key, required this.finalText}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -7,12 +7,14 @@ class Circle extends StatelessWidget {
   final int n;
   final EdgeInsets padding;
 
-  Circle(
-      {required this.color,
+  const Circle(
+      {Key? key,
+      required this.color,
       required this.diameter,
       required this.n,
       required this.padding,
-      this.center = const Offset(55.0, 15.0)});
+      this.center = const Offset(55.0, 15.0)})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
