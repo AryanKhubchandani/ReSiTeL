@@ -13,6 +13,8 @@ class Archive extends StatefulWidget {
 }
 
 class _ArchiveState extends State<Archive> {
+  final Stream<QuerySnapshot> storedMessages =
+      FirebaseFirestore.instance.collection("messages").snapshots();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,15 +33,18 @@ class _ArchiveState extends State<Archive> {
           ),
         ),
       ),
-      body: AnimationLimiter(
-        child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection("messages").snapshots(),
-          builder: (context, snapshot) {
-            return !snapshot.hasData
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : ListView.builder(
+      body: StreamBuilder<QuerySnapshot>(
+        stream: storedMessages,
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return const Center(child: Text("Something went wrong"));
+          }
+          return !snapshot.hasData
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : AnimationLimiter(
+                  child: ListView.builder(
                     itemCount: (snapshot.data!).docs.length,
                     itemBuilder: (BuildContext context, int index) {
                       DocumentSnapshot archive = snapshot.data!.docs[index];
@@ -58,6 +63,7 @@ class _ArchiveState extends State<Archive> {
                                   dismissible: DismissiblePane(onDismissed: () {
                                     HapticFeedback.mediumImpact();
                                     deleteProduct(archive.id);
+                                    setState(() {});
                                   }),
                                   children: [
                                     SlidableAction(
@@ -109,9 +115,9 @@ class _ArchiveState extends State<Archive> {
                         ),
                       );
                     },
-                  );
-          },
-        ),
+                  ),
+                );
+        },
       ),
     );
   }
