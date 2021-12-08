@@ -303,7 +303,9 @@ class CameraFeedState extends State<CameraFeed> {
                         return true;
                       },
                       onEndIconPress: () {
-                        isDetecting = false;
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const HomePage()));
+                        controller.stopImageStream();
                         HapticFeedback.lightImpact();
                         showDialog<void>(
                             context: context,
