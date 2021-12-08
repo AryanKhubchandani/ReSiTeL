@@ -28,7 +28,7 @@ class _MainPageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
+      bottomNavigationBar: SizedBox(
         height: 0.0,
         child: BottomNavigationBar(
           selectedIconTheme: IconThemeData(color: _getColor()),
@@ -39,7 +39,7 @@ class _MainPageState extends State<HomePage> {
           showUnselectedLabels: false,
           currentIndex: _page,
           onTap: (index) {
-            this._c.animateToPage(index,
+            _c.animateToPage(index,
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeInOutSine);
           },
@@ -65,7 +65,7 @@ class _MainPageState extends State<HomePage> {
           });
         },
         children: <Widget>[
-          Archive(),
+          const Archive(),
           LiveFeed(cameras),
         ],
       ),

@@ -57,53 +57,54 @@ class SplashScreenState extends State<SplashScreen>
             parent: controller1,
             curve: const Interval(0.0, 0.14, curve: Curves.easeInOut)));
     scale1 = Tween<double>(begin: 0.8, end: 0.4).animate(CurvedAnimation(
-        parent: controller1, curve: Interval(0.0, 0.14, curve: Curves.linear)));
+        parent: controller1,
+        curve: const Interval(0.0, 0.14, curve: Curves.linear)));
 
     translation1Reverse = Tween<double>(begin: -20.0, end: 55.0).animate(
         CurvedAnimation(
             parent: controller1,
-            curve: Interval(0.14, 0.28, curve: Curves.easeInOut)));
+            curve: const Interval(0.14, 0.28, curve: Curves.easeInOut)));
     scale1Reverse = Tween<double>(begin: 0.4, end: 0.85).animate(
         CurvedAnimation(
             parent: controller1,
-            curve: Interval(0.14, 0.28, curve: Curves.linear)));
+            curve: const Interval(0.14, 0.28, curve: Curves.linear)));
 
     translation2 = Tween<double>(begin: 55.0, end: -20.0).animate(
         CurvedAnimation(
             parent: controller1,
-            curve: Interval(0.28, 0.42, curve: Curves.easeInOut)));
+            curve: const Interval(0.28, 0.42, curve: Curves.easeInOut)));
     scale2 = Tween<double>(begin: 0.85, end: 0.4).animate(CurvedAnimation(
         parent: controller1,
-        curve: Interval(0.28, 0.42, curve: Curves.linear)));
+        curve: const Interval(0.28, 0.42, curve: Curves.linear)));
 
     translation2Reverse = Tween<double>(begin: -20.0, end: 60.0).animate(
         CurvedAnimation(
             parent: controller1,
-            curve: Interval(0.42, 0.57, curve: Curves.easeInOut)));
+            curve: const Interval(0.42, 0.57, curve: Curves.easeInOut)));
     scale2Reverse = Tween<double>(begin: 0.4, end: 0.9).animate(CurvedAnimation(
         parent: controller1,
-        curve: Interval(0.42, 0.57, curve: Curves.linear)));
+        curve: const Interval(0.42, 0.57, curve: Curves.linear)));
 
     translation3 = Tween<double>(begin: 60.0, end: -20.0).animate(
         CurvedAnimation(
             parent: controller1,
-            curve: Interval(0.57, 0.71, curve: Curves.easeInOut)));
+            curve: const Interval(0.57, 0.71, curve: Curves.easeInOut)));
     scale3 = Tween<double>(begin: 0.9, end: 0.4).animate(CurvedAnimation(
         parent: controller1,
-        curve: Interval(0.57, 0.71, curve: Curves.linear)));
+        curve: const Interval(0.57, 0.71, curve: Curves.linear)));
 
     translation3Reverse = Tween<double>(begin: -20.0, end: 65.0).animate(
         CurvedAnimation(
             parent: controller1,
-            curve: Interval(0.71, 0.85, curve: Curves.easeInOut)));
+            curve: const Interval(0.71, 0.85, curve: Curves.easeInOut)));
     scale3Reverse = Tween<double>(begin: 0.4, end: 1.0).animate(CurvedAnimation(
         parent: controller1,
-        curve: Interval(0.71, 0.85, curve: Curves.linear)));
+        curve: const Interval(0.71, 0.85, curve: Curves.linear)));
 
     translation4 = Tween<double>(begin: 65.0, end: 30.0).animate(
         CurvedAnimation(
             parent: controller1,
-            curve: Interval(0.85, 1.0, curve: Curves.linear)));
+            curve: const Interval(0.85, 1.0, curve: Curves.linear)));
 
     translation1.addListener(() {
       setCurrentTranslation(translation1);

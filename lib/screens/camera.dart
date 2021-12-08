@@ -8,6 +8,7 @@ import 'package:tflite/tflite.dart';
 import 'dart:math' as math;
 
 import 'camera_page.dart';
+import 'home_page.dart';
 
 typedef void Callback(List<dynamic> list, int h, int w);
 FlashMode? _currentFlashMode;
@@ -66,13 +67,6 @@ class CameraFeedState extends State<CameraFeed> {
     } on CameraException catch (e) {
       print('Error initializing camera: $e');
     }
-
-    // // Update the boolean
-    // if (mounted) {
-    //   setState(() {
-    //     _isCameraInitialized = controller.value.isInitialized;
-    //   });
-    // }
   }
 
   @override
@@ -80,7 +74,7 @@ class CameraFeedState extends State<CameraFeed> {
     animatedController = AnimateIconController();
 
     super.initState();
-
+    finalText = [];
     print(widget.cameras);
     if (widget.cameras == null || widget.cameras.length < 1) {
       print('No Cameras Found.');
@@ -94,37 +88,6 @@ class CameraFeedState extends State<CameraFeed> {
           return;
         }
         setState(() {});
-
-        // controller.startImageStream((CameraImage img) {
-        //   if (!isDetecting) {
-        //     isDetecting = true;
-        //     Tflite.detectObjectOnFrame(
-        //       bytesList: img.planes.map((plane) {
-        //         return plane.bytes;
-        //       }).toList(),
-        //       model: "SSDMobileNet",
-        //       imageHeight: img.height,
-        //       imageWidth: img.width,
-        //       imageMean: 127.5,
-        //       imageStd: 127.5,
-        //       numResultsPerClass: 1,
-        //       threshold: 0.4,
-        //     )
-        //         .then((recognitions) {
-        //       /*
-        //       When setRecognitions is called here, the parameters are being passed on to the parent widget as callback. i.e. to the LiveFeed class
-        //        */
-        //       widget.setRecognitions(recognitions!, img.height, img.width);
-        //       print("HERE IS THE OBJECT LIST");
-        //       print(recognitions[0]['detectedClass']);
-        //       if (recognitions[0]['confidenceInClass'] * 100 > 70) {
-        //         finalText.add(recognitions[0]['detectedClass']);
-        //       }
-        //       isDetecting = false;
-        //     });
-        //   }
-        // }
-        // );
       });
     }
   }
@@ -151,47 +114,78 @@ class CameraFeedState extends State<CameraFeed> {
     var previewRatio = previewH / previewW;
 
     return Scaffold(
-        backgroundColor: Colors.black,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              AspectRatio(
-                aspectRatio: 1 / controller.value.aspectRatio,
-                child: Stack(
-                  children: [
-                    // controller!.buildPreview(),
-                    CameraPreview(controller),
+      backgroundColor: Colors.black,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            AspectRatio(
+              aspectRatio: 1 / controller.value.aspectRatio,
+              child: Stack(
+                children: [
+                  // controller!.buildPreview(),
+                  CameraPreview(controller),
 
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        16.0,
-                        8.0,
-                        16.0,
-                        8.0,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const Spacer(),
-                              Column(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      16.0,
+                      8.0,
+                      16.0,
+                      8.0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const Spacer(),
+                            Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    HapticFeedback.lightImpact();
+                                    // setState(() {
+                                    //   _isCameraInitialized = false;
+                                    // });
+                                    onNewCameraSelected(
+                                      cameras[_isFrontCameraSelected ? 0 : 1],
+                                    );
+                                    setState(() {
+                                      _isFrontCameraSelected =
+                                          !_isFrontCameraSelected;
+                                      _isFlashOn = false;
+                                    });
+                                  },
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.circle,
+                                        color: Colors.black38,
+                                        size: 45,
+                                      ),
+                                      Icon(
+                                        _isFrontCameraSelected
+                                            ? Icons.camera_rear
+                                            : Icons.camera_front,
+                                        color: Colors.white,
+                                        size: 25,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                InkWell(
+                                    onTap: () async {
                                       HapticFeedback.lightImpact();
-                                      // setState(() {
-                                      //   _isCameraInitialized = false;
-                                      // });
-                                      onNewCameraSelected(
-                                        cameras[_isFrontCameraSelected ? 0 : 1],
-                                      );
                                       setState(() {
-                                        _isFrontCameraSelected =
-                                            !_isFrontCameraSelected;
-                                        _isFlashOn = false;
+                                        _isFlashOn = !_isFlashOn;
+                                        _currentFlashMode = FlashMode.always;
                                       });
+                                      _isFlashOn
+                                          ? controller
+                                              .setFlashMode(FlashMode.torch)
+                                          : controller
+                                              .setFlashMode(FlashMode.off);
                                     },
                                     child: Stack(
                                       alignment: Alignment.center,
@@ -202,87 +196,131 @@ class CameraFeedState extends State<CameraFeed> {
                                           size: 45,
                                         ),
                                         Icon(
-                                          _isFrontCameraSelected
-                                              ? Icons.camera_rear
-                                              : Icons.camera_front,
+                                          _isFlashOn
+                                              ? Icons.flash_on
+                                              : Icons.flash_off,
                                           color: Colors.white,
                                           size: 25,
                                         ),
                                       ],
-                                    ),
-                                  ),
-                                  InkWell(
-                                      onTap: () async {
-                                        HapticFeedback.lightImpact();
-                                        setState(() {
-                                          _isFlashOn = !_isFlashOn;
-                                          _currentFlashMode = FlashMode.always;
-                                        });
-                                        _isFlashOn
-                                            ? controller
-                                                .setFlashMode(FlashMode.torch)
-                                            : controller
-                                                .setFlashMode(FlashMode.off);
-                                      },
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          const Icon(
-                                            Icons.circle,
-                                            color: Colors.black38,
-                                            size: 45,
-                                          ),
-                                          Icon(
-                                            _isFlashOn
-                                                ? Icons.flash_on
-                                                : Icons.flash_off,
-                                            color: Colors.white,
-                                            size: 25,
-                                          ),
-                                        ],
-                                      )),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
+                                    )),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              color: Colors.black,
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Text(
+                  (() {
+                    if (finalText.isEmpty) {
+                      return "Your message will appear here";
+                    }
+                    return finalText.join();
+                  })(),
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InkWell(
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    if (finalText.isNotEmpty) {
+                      finalText.removeLast();
+                      setState(() {});
+                    }
+                  },
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: const [
+                      Icon(
+                        Icons.circle,
+                        color: Colors.black38,
+                        size: 60,
                       ),
+                      Icon(
+                        Icons.backspace,
+                        color: Colors.red,
+                        size: 30,
+                      ),
+                    ],
+                  ),
+                ),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    const Icon(
+                      Icons.circle,
+                      color: Colors.black38,
+                      size: 80.0,
+                    ),
+                    AnimateIcons(
+                      startIcon: Icons.play_arrow,
+                      endIcon: Icons.stop,
+                      controller: animatedController,
+                      size: 60.0,
+                      startIconColor: Colors.green,
+                      endIconColor: Colors.red,
+                      onStartIconPress: () {
+                        HapticFeedback.lightImpact();
+                        controller.startImageStream((CameraImage img) {
+                          if (!isDetecting) {
+                            isDetecting = true;
+                            Tflite.detectObjectOnFrame(
+                              bytesList: img.planes.map((plane) {
+                                return plane.bytes;
+                              }).toList(),
+                              model: "SSDMobileNet",
+                              imageHeight: img.height,
+                              imageWidth: img.width,
+                              imageMean: 127.5,
+                              imageStd: 127.5,
+                              numResultsPerClass: 1,
+                              threshold: 0.4,
+                            ).then((recognitions) {
+                              widget.setRecognitions(
+                                  recognitions!, img.height, img.width);
+                              if (recognitions[0]['confidenceInClass'] * 100 >
+                                  73) {
+                                finalText.add(recognitions[0]['detectedClass']);
+                              }
+                              isDetecting = false;
+                            });
+                          }
+                        });
+                        didUpdateWidget(CameraFeed(cameras, (list, h, w) {}));
+                        return true;
+                      },
+                      onEndIconPress: () {
+                        isDetecting = false;
+                        HapticFeedback.lightImpact();
+                        showDialog<void>(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return FinalMessage(finalText: finalText);
+                            });
+                        return true;
+                      },
                     ),
                   ],
                 ),
-              ),
-              Container(
-                width: double.infinity,
-                color: Colors.black,
-                // decoration: BoxDecoration(
-                //     color: Colors.black,
-                //     border: Border.all(
-                //       color: Colors.black,
-                //       width: 2.0,
-                //     )),
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Text(
-                    (() {
-                      if (finalText.isEmpty) {
-                        return "Your message will appear here";
-                      }
-                      return finalText.join();
-                    })(),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
+                InkWell(
                     onTap: () {
                       HapticFeedback.lightImpact();
-                      if (finalText.isNotEmpty) {
-                        finalText.removeLast();
-                        setState(() {});
-                      }
+                      finalText.add(" ");
+                      setState(() {});
                     },
                     child: Stack(
                       alignment: Alignment.center,
@@ -293,112 +331,17 @@ class CameraFeedState extends State<CameraFeed> {
                           size: 60,
                         ),
                         Icon(
-                          Icons.backspace,
-                          color: Colors.red,
+                          Icons.space_bar,
+                          color: Colors.blue,
                           size: 30,
                         ),
                       ],
-                    ),
-                  ),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      const Icon(
-                        Icons.circle,
-                        color: Colors.black38,
-                        size: 80.0,
-                      ),
-                      AnimateIcons(
-                        startIcon: Icons.play_arrow,
-                        endIcon: Icons.stop,
-                        controller: animatedController,
-                        size: 60.0,
-                        startIconColor: Colors.green,
-                        endIconColor: Colors.red,
-                        onStartIconPress: () {
-                          HapticFeedback.lightImpact();
-                          controller.startImageStream((CameraImage img) {
-                            if (!isDetecting) {
-                              isDetecting = true;
-                              Tflite.detectObjectOnFrame(
-                                bytesList: img.planes.map((plane) {
-                                  return plane.bytes;
-                                }).toList(),
-                                model: "SSDMobileNet",
-                                imageHeight: img.height,
-                                imageWidth: img.width,
-                                imageMean: 127.5,
-                                imageStd: 127.5,
-                                numResultsPerClass: 1,
-                                threshold: 0.4,
-                              ).then((recognitions) {
-                                /*
-              When setRecognitions is called here, the parameters are being passed on to the parent widget as callback. i.e. to the LiveFeed class
-               */
-                                widget.setRecognitions(
-                                    recognitions!, img.height, img.width);
-                                print("HERE IS THE OBJECT LIST");
-                                print(recognitions[0]['detectedClass']);
-                                if (recognitions[0]['confidenceInClass'] * 100 >
-                                    70) {
-                                  finalText
-                                      .add(recognitions[0]['detectedClass']);
-                                }
-                                isDetecting = false;
-                              });
-                            }
-                          });
-                          // didUpdateWidget(CameraFeed(cameras, (list, h, w) {}));
-                          return true;
-                        },
-                        onEndIconPress: () {
-                          isDetecting = false;
-
-                          HapticFeedback.lightImpact();
-                          showDialog<void>(
-                              context: context,
-                              barrierDismissible:
-                                  false, // user must tap button!
-                              builder: (BuildContext context) {
-                                return FinalMessage(finalText: finalText);
-                              });
-                          return true;
-                        },
-                      ),
-                    ],
-                  ),
-                  InkWell(
-                      onTap: () {
-                        HapticFeedback.lightImpact();
-                        finalText.add(" ");
-                        setState(() {});
-                      },
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: const [
-                          Icon(
-                            Icons.circle,
-                            color: Colors.black38,
-                            size: 60,
-                          ),
-                          Icon(
-                            Icons.space_bar,
-                            color: Colors.blue,
-                            size: 30,
-                          ),
-                        ],
-                      )),
-                ],
-              ),
-            ],
-          ),
-        )
-        // : const Center(
-        //     child: Text(
-        //       'LOADING..',
-        //       style: TextStyle(color: Colors.white),
-        //     ),
-        //   ),
-        );
+                    )),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

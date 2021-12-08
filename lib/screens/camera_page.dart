@@ -20,7 +20,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   final int _page = 1;
   late PageController _c;
   CameraController? controller;
-  bool _isCameraInitialized = false;
   late AnimateIconController animatedController;
 
   void onNewCameraSelected(CameraDescription cameraDescription) async {
@@ -62,9 +61,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
 
     // Update the boolean
     if (mounted) {
-      setState(() {
-        _isCameraInitialized = controller!.value.isInitialized;
-      });
+      setState(() {});
     }
   }
 

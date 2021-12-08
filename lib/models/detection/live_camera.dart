@@ -46,8 +46,8 @@ class LiveFeedState extends State<LiveFeed> {
   }
 
   @override
-  void dispose() async {
-    await endTfModel();
+  void dispose() {
+    endTfModel();
     super.dispose();
   }
 
