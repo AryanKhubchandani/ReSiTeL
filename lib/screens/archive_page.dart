@@ -13,8 +13,10 @@ class Archive extends StatefulWidget {
 }
 
 class _ArchiveState extends State<Archive> {
-  final Stream<QuerySnapshot> storedMessages =
-      FirebaseFirestore.instance.collection("messages").snapshots();
+  final Stream<QuerySnapshot> storedMessages = FirebaseFirestore.instance
+      .collection("messages")
+      .orderBy('createdOn', descending: true)
+      .snapshots();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +59,7 @@ class _ArchiveState extends State<Archive> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Slidable(
-                                key: const ValueKey(0),
+                                key: UniqueKey(),
                                 startActionPane: ActionPane(
                                   motion: const ScrollMotion(),
                                   dismissible: DismissiblePane(onDismissed: () {

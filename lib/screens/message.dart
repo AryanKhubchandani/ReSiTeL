@@ -56,5 +56,6 @@ class FinalMessage extends StatelessWidget {
 Future<void> uploadingData(String content) async {
   await FirebaseFirestore.instance.collection("messages").add({
     'content': content,
+    'createdOn': FieldValue.serverTimestamp(),
   });
 }
